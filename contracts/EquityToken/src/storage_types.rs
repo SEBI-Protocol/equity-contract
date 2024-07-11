@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Address};
+use soroban_sdk::{contracttype, Vec, Address};
 
 pub(crate) const DAY_IN_LEDGERS: u32 = 17280;
 pub(crate) const INSTANCE_BUMP_AMOUNT: u32 = 7 * DAY_IN_LEDGERS;
@@ -27,4 +27,24 @@ pub enum DataKey {
     Balance(Address),
     State(Address),
     Admin,
+    Regulations
+}
+
+#[derive(Clone)]
+#[contracttype]
+// Regulations are holders governed set of rules
+// for securing themselves from losses & sepculation.
+pub struct Regulations {
+  // List of exchanges tokens can be traded on.
+  pub exchange_whitelist: Vec<Address>,
+
+  // KYC requirement for holders, credentials can be verified
+  // on-chain using chosen protocol / logic.
+  pub only_kyc_owners: bool,
+
+  // Circuit breakers limit defining min/max price changes per day.
+  pub circuit_limit: u32,
+
+  // Maximum ownership possible per account.
+  pub max_ownership: u32
 }

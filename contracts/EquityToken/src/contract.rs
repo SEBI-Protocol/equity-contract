@@ -93,6 +93,7 @@ impl token::Interface for Token {
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
 
+        // Make the exchange wallets as allowances only.
         write_allowance(&e, from.clone(), spender.clone(), amount, expiration_ledger);
         TokenUtils::new(&e)
             .events()
@@ -111,6 +112,9 @@ impl token::Interface for Token {
 
         check_nonnegative_amount(amount);
 
+        // Disable token for everyone.
+        panic!("You cannot transfer Equity Tokens.");
+
         e.storage()
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
@@ -124,7 +128,9 @@ impl token::Interface for Token {
         spender.require_auth();
 
         check_nonnegative_amount(amount);
-
+        
+        // Check if the address is whitelisted.
+        
         e.storage()
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
@@ -144,8 +150,7 @@ impl token::Interface for Token {
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
 
-        spend_balance(&e, from.clone(), amount);
-        TokenUtils::new(&e).events().burn(from, amount);
+        panic!("Burn does not exist in Equity Tokens.");
     }
 
     fn burn_from(e: Env, spender: Address, from: Address, amount: i128) {
@@ -157,9 +162,7 @@ impl token::Interface for Token {
             .instance()
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
 
-        spend_allowance(&e, from.clone(), spender, amount);
-        spend_balance(&e, from.clone(), amount);
-        TokenUtils::new(&e).events().burn(from, amount)
+        panic!("Burn does not exist in Equity Tokens.");
     }
 
     fn decimals(e: Env) -> u32 {
