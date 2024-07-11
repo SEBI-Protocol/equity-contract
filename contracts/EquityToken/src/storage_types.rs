@@ -1,4 +1,4 @@
-use soroban_sdk::{contracttype, Vec, Address};
+use soroban_sdk::{contracttype, Address, Vec, U256};
 
 pub(crate) const DAY_IN_LEDGERS: u32 = 17280;
 pub(crate) const INSTANCE_BUMP_AMOUNT: u32 = 7 * DAY_IN_LEDGERS;
@@ -46,5 +46,5 @@ pub struct Regulations {
   pub circuit_limit: u32,
 
   // Maximum ownership possible per account.
-  pub max_ownership: u32
+  pub max_ownership: i128
 }
