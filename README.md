@@ -1,3 +1,5 @@
+![Equity Banner](/equity%20banner.png)
+
 # Equity Token
 
 Equity Token is an implementation of TokenInterface with features designed for buisnesses to launch equity, manage governance and setup configurable regulations for retail investors in mind.
