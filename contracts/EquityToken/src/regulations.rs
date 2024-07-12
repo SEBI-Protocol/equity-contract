@@ -1,6 +1,8 @@
 use soroban_sdk::{vec, Address, Env, String};
 use soroban_token_sdk::TokenUtils;
 
+use crate::admin::{has_administrator, read_administrator};
+
 use crate::storage_types::{DataKey, Regulations};
 
 pub fn get_default_regulations(e: &Env, d_exchange: Address) -> Regulations {
@@ -92,6 +94,33 @@ pub fn check_whitelist(e: &Env, address: Address) -> bool {
             ));
 
     regulations.exchange_whitelist.contains(address)
+}
+
+pub fn add_exchange_whitelist(e: &Env, new_address: Address) {
+    let key = DataKey::Regulations;
+    let admin = read_administrator(&e);
+
+    admin.require_auth();
+
+    let mut regulations: Regulations =
+        e.storage()
+            .persistent()
+            .get(&key)
+            .unwrap_or(get_default_regulations(
+                &e,
+                Address::from_string(&String::from_str(
+                    &e,
+                    "GC3HTLMTWGD7QVGBWRSKI2R2YEM2LIULUUKVLBWGMODQL5EDSL6N66FN",
+                )),
+            ));
+    
+    let mut whitlist = regulations.exchange_whitelist.clone();
+    whitlist.push_back(new_address);
+
+    regulations.exchange_whitelist = whitlist;
+
+    e.storage().persistent().set(&key.clone(), &regulations);
+
 }
 
 pub fn write_default_regulations(e: &Env, d_exchange: Address) {

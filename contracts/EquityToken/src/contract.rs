@@ -4,7 +4,9 @@ use crate::admin::{has_administrator, read_administrator, write_administrator};
 use crate::allowance::{read_allowance, spend_allowance, write_allowance};
 use crate::balance::{read_balance, receive_balance, spend_balance};
 use crate::metadata::{read_decimal, read_name, read_symbol, write_metadata};
-use crate::regulations::{read_is_kyc_required, read_max_ownership, write_default_regulations};
+use crate::regulations::{
+    check_whitelist, read_is_kyc_required, read_max_ownership, write_default_regulations,
+};
 use crate::storage_types::{AllowanceDataKey, AllowanceValue, DataKey};
 use crate::storage_types::{INSTANCE_BUMP_AMOUNT, INSTANCE_LIFETIME_THRESHOLD};
 use soroban_sdk::token::{self, Interface as _};
@@ -104,6 +106,12 @@ impl token::Interface for Token {
             .extend_ttl(INSTANCE_LIFETIME_THRESHOLD, INSTANCE_BUMP_AMOUNT);
 
         // Make the exchange wallets as allowances only.
+        // spender must be present in the exchanges whitelist.
+        let is_whitlist = check_whitelist(&e, spender.clone());
+        if is_whitlist == false {
+            panic!("Only whitelisted exchanges can be approved.")
+        }
+
         write_allowance(&e, from.clone(), spender.clone(), amount, expiration_ledger);
         TokenUtils::new(&e)
             .events()
