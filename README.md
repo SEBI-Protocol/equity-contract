@@ -43,3 +43,9 @@ The equity-token fundamentally implement these sets of regulations, but the scal
 ```
 
 Read more: https://sebi.xyz 
+
+
+### Registered Contracts
+
+- Contract Latest: CB4DJBVLORRPY7GFJ64KHV7QWB5IDWNDHEV6KFFMPOVKKUDWFOZO2RQI
+- Wasm Hash for Equity Token Contract:  699166484a3c6eadfc65184b416f2fff36635952c75e6ec6a779c78b3c5f990e
